@@ -4,280 +4,326 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Honorários | Saúde Mental</title>
-    <!-- Fontes Elegantes: Playfair Display (Títulos) e DM Sans (Corpo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Fontes Premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-body: #111111;       /* Preto Absoluto */
-            --bg-card: #1c1c1c;       /* Cinza Chumbo */
-            --primary: #d4af37;       /* Dourado Executivo */
-            --primary-hover: #b5952f;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --border: #333333;
-            --success: #2e7d32;
+            --bg-body: #050505;       /* Preto Profundo */
+            --bg-card: #121212;       /* Preto Fosco */
+            --gold-main: #cca43b;     /* Dourado Nobre */
+            --gold-light: #e5c567;    /* Dourado Luz */
+            --gold-dark: #8a6e2f;     /* Dourado Sombra */
+            --text-main: #f0f0f0;
+            --text-muted: #888888;
+            --border-color: #333333;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; outline: none; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif;
             background-color: var(--bg-body);
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 70%);
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             margin: 0;
             min-height: 100vh;
         }
 
         .container {
             background-color: var(--bg-card);
-            padding: 50px;
-            border-radius: 4px; /* Bordas mais retas para ar sério */
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            max-width: 800px;
+            padding: 60px 50px;
+            border-radius: 12px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            max-width: 850px;
             width: 100%;
-            border: 1px solid var(--border);
-            border-top: 4px solid var(--primary); /* Detalhe premium no topo */
+            border: 1px solid var(--border-color);
             position: relative;
+            overflow: hidden;
         }
 
-        /* Título com fonte Serifada Elegante */
+        /* Detalhe Dourado no Topo */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-main), transparent);
+        }
+
+        /* Tipografia */
         h1 { 
-            font-family: 'Playfair Display', serif;
-            color: var(--primary); 
+            font-family: 'Cinzel', serif;
+            color: var(--gold-main); 
             text-align: center; 
-            font-size: 32px; 
-            margin-bottom: 10px; 
-            letter-spacing: 1px;
-            font-weight: 700;
+            font-size: 36px; 
+            margin: 0 0 10px 0; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
             text-align: center;
             color: var(--text-muted);
-            font-size: 14px;
-            margin-bottom: 40px;
+            font-size: 13px;
+            margin-bottom: 50px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            display: inline-block;
+            width: 100%;
         }
 
-        .form-group { margin-bottom: 30px; }
+        .form-group { margin-bottom: 35px; }
         
-        label { 
-            display: block; 
-            margin-bottom: 12px; 
+        label.section-title { 
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px; 
             font-size: 14px; 
-            color: var(--primary); 
-            font-weight: 700;
+            color: var(--gold-main); 
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
+        label.section-title i { margin-right: 10px; font-size: 16px; }
+
+        /* Inputs e Selects Estilizados */
         select, input {
             width: 100%;
-            padding: 16px;
-            border-radius: 2px;
-            border: 1px solid var(--border);
-            background: #252525;
+            padding: 18px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #1a1a1a;
             color: white;
             font-size: 16px;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.3s;
-            appearance: none; /* Remove estilo padrão do browser */
+            font-family: 'Manrope', sans-serif;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
         }
 
         select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cca43b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 15px top 50%;
-            background-size: 12px auto;
+            background-position: right 20px center;
+            background-size: 16px;
         }
 
-        select:focus, input:focus { border-color: var(--primary); outline: none; background: #2a2a2a; }
+        select:hover, input:hover { border-color: #444; background: #222; }
+        select:focus, input:focus { border-color: var(--gold-main); box-shadow: 0 0 15px rgba(204, 164, 59, 0.1); outline: none; }
 
-        /* Checkboxes Elegantes */
+        /* REINVENÇÃO: Checkboxes como Cartões Selecionáveis */
         .checkbox-group {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
 
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            background: #252525;
-            padding: 15px 20px;
-            border-radius: 2px;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: 0.3s;
+        /* Ocultar o input original */
+        .checkbox-card input[type="checkbox"] {
+            display: none;
         }
 
-        .checkbox-item:hover { border-color: var(--primary); background: #2a2a2a; }
-        
-        .checkbox-item input {
-            width: 18px;
-            height: 18px;
-            margin-right: 15px;
-            accent-color: var(--primary);
+        .checkbox-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .checkbox-card span { font-size: 14px; color: #ccc; }
+        .checkbox-card .icon-check { 
+            width: 20px; 
+            height: 20px; 
+            border: 2px solid #555; 
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .checkbox-card .icon-check::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 12px;
+            color: #000;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s;
+        }
+
+        /* Estado Selecionado */
+        .checkbox-card.active {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border-color: var(--gold-main);
+            box-shadow: 0 0 20px rgba(204, 164, 59, 0.15);
+        }
+
+        .checkbox-card.active span { color: var(--gold-main); font-weight: 600; }
+        
+        .checkbox-card.active .icon-check { 
+            background: var(--gold-main); 
+            border-color: var(--gold-main); 
+        }
+        
+        .checkbox-card.active .icon-check::after {
+            opacity: 1;
+            transform: scale(1);
         }
 
         /* Botão Principal */
         button.calc-btn {
             width: 100%;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary) 0%, #b5952f 100%);
-            color: #000;
+            padding: 22px;
+            background: linear-gradient(135deg, var(--gold-main) 0%, var(--gold-dark) 100%);
+            color: #111;
             border: none;
-            border-radius: 2px;
+            border-radius: 6px;
             font-weight: 700;
             cursor: pointer;
             font-size: 16px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-top: 20px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
 
-        button.calc-btn:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); 
+        button.calc-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-main) 100%);
+            z-index: -1;
+            transition: opacity 0.4s;
+            opacity: 0;
         }
+
+        button.calc-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(204, 164, 59, 0.2); }
+        button.calc-btn:hover::before { opacity: 1; }
 
         /* Área de Resultado */
         .result-box {
-            margin-top: 40px;
-            padding: 30px;
-            background: #111;
-            border: 1px solid var(--border);
-            border-left: 5px solid var(--primary);
+            margin-top: 50px;
+            padding: 40px;
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--gold-main);
             text-align: center;
             position: relative;
+            border-radius: 0 0 12px 12px;
         }
 
-        .result-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;}
+        .result-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; display: block; }
         .result-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 56px;
+            font-family: 'Cinzel', serif;
+            font-size: 64px;
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(to right, var(--gold-light), var(--gold-main), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: block;
             line-height: 1;
         }
 
-        /* Rodapé e Créditos */
+        /* Footer */
         .footer-section {
             margin-top: 60px;
             width: 100%;
-            max-width: 800px;
             text-align: center;
-            border-top: 1px solid var(--border);
             padding-top: 40px;
+            border-top: 1px solid var(--border-color);
         }
 
-        .credits {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .credits strong { color: var(--primary); font-weight: 400; }
+        .credits { font-size: 13px; color: #555; margin-bottom: 30px; }
+        .credits strong { color: var(--gold-main); font-weight: 400; }
 
         .btn-hire {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            background: transparent;
-            color: var(--text-main);
-            padding: 12px 30px;
-            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: #aaa;
+            padding: 14px 35px;
+            border: 1px solid var(--border-color);
             border-radius: 50px;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 40px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             transition: 0.3s;
         }
 
-        .btn-hire:hover { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.05); }
-
-        /* Área de Doação - Minimalista */
-        .donation-card {
-            background: #222;
-            padding: 30px;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-radius: 4px;
+        .btn-hire:hover { 
+            border-color: #25d366; 
+            color: #25d366; 
+            background: rgba(37, 211, 102, 0.05); 
         }
 
-        .donation-card h2 { 
-            font-family: 'Playfair Display', serif;
-            font-size: 20px; 
-            margin: 0 0 20px 0; 
-            color: var(--primary); 
+        /* Doação */
+        .donation-container {
+            margin-top: 40px;
+            background: #0f0f0f;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         #qrcode {
-            background: white;
-            padding: 15px;
-            border-radius: 2px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 10px;
+            background: #fff;
+            border-radius: 4px;
         }
 
-        .pix-key-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: #111;
-            padding: 10px 20px;
-            border: 1px solid var(--border);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .pix-key-text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-muted);
-            font-family: monospace;
-            font-size: 13px;
-            flex-grow: 1;
-        }
-
-        .copy-btn {
+        .pix-btn {
+            margin-top: 20px;
             background: transparent;
-            color: var(--primary);
-            border: none;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
+            color: var(--gold-main);
+            border: 1px solid var(--gold-main);
+            padding: 10px 25px;
+            border-radius: 4px;
             cursor: pointer;
-            padding: 5px 10px;
-            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 2px;
             transition: 0.3s;
         }
 
-        .copy-btn:hover { color: #fff; }
+        .pix-btn:hover { background: var(--gold-main); color: #000; }
+        
+        /* Ocultar a chave pix textual longa, mostrar só botão */
+        #pixKey { display: none; }
 
-        @media (max-width: 600px) {
-            .checkbox-group { grid-template-columns: 1fr; }
+        @media (max-width: 768px) {
             .container { padding: 30px 20px; }
-            h1 { font-size: 26px; }
-            .result-value { font-size: 42px; }
-            .pix-key-container { flex-direction: column; align-items: stretch; text-align: center; }
+            h1 { font-size: 28px; }
+            .checkbox-group { grid-template-columns: 1fr; }
+            .result-value { font-size: 48px; }
         }
     </style>
 </head>
@@ -285,12 +331,11 @@
 
 <div class="container">
     <h1>Calculadora de Honorários</h1>
-    <p class="subtitle">Inteligência de Mercado para Profissionais da Saúde Mental</p>
+    <span class="subtitle">Inteligência de Mercado em Saúde Mental</span>
     
     <div class="form-group">
-        <label><i class="fa-solid fa-user-doctor" style="margin-right: 8px;"></i> Área de Atuação</label>
+        <label class="section-title"><i class="fa-solid fa-user-doctor"></i> Especialidade</label>
         <select id="profissao">
-            <!-- Ordenado Alfabeticamente -->
             <option value="130">Acompanhante Terapêutico (AT)</option>
             <option value="170">Analista Junguiano</option>
             <option value="115">Arteterapeuta</option>
@@ -325,7 +370,7 @@
     </div>
 
     <div class="form-group">
-        <label><i class="fa-solid fa-map-location-dot" style="margin-right: 8px;"></i> Região de Atuação</label>
+        <label class="section-title"><i class="fa-solid fa-map-location-dot"></i> Região</label>
         <select id="regiao">
             <option value="1.0">Centro-Oeste (DF, GO, MT, MS)</option>
             <option value="0.9">Nordeste (AL, BA, CE, MA, PB, PE, PI, RN, SE)</option>
@@ -336,31 +381,50 @@
     </div>
 
     <div class="form-group">
-        <label><i class="fa-solid fa-graduation-cap" style="margin-right: 8px;"></i> Composição Acadêmica</label>
+        <label class="section-title"><i class="fa-solid fa-graduation-cap"></i> Formação Acadêmica (Multi-seleção)</label>
         <div class="checkbox-group">
-            <label class="checkbox-item">
-                <input type="checkbox" value="15" class="formacao-check"> Curso Profissionalizante (+R$15/h)
+            
+            <label class="checkbox-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="15" class="formacao-check">
+                <span>Curso Profissionalizante</span>
+                <div class="icon-check"></div>
             </label>
-            <label class="checkbox-item">
-                <input type="checkbox" value="0" class="formacao-check" checked> Graduação (Base)
+
+            <label class="checkbox-card active" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="0" class="formacao-check" checked>
+                <span>Graduação (Base)</span>
+                <div class="icon-check"></div>
             </label>
-            <label class="checkbox-item">
-                <input type="checkbox" value="30" class="formacao-check"> Especialização (+R$30/h)
+
+            <label class="checkbox-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="30" class="formacao-check">
+                <span>Especialização</span>
+                <div class="icon-check"></div>
             </label>
-            <label class="checkbox-item">
-                <input type="checkbox" value="40" class="formacao-check"> Pós Graduação (+R$40/h)
+
+            <label class="checkbox-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="40" class="formacao-check">
+                <span>Pós Graduação</span>
+                <div class="icon-check"></div>
             </label>
-            <label class="checkbox-item">
-                <input type="checkbox" value="60" class="formacao-check"> Mestrado (+R$60/h)
+
+            <label class="checkbox-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="60" class="formacao-check">
+                <span>Mestrado</span>
+                <div class="icon-check"></div>
             </label>
-            <label class="checkbox-item">
-                <input type="checkbox" value="100" class="formacao-check"> Doutorado (+R$100/h)
+
+            <label class="checkbox-card" onclick="toggleCheckbox(this)">
+                <input type="checkbox" value="100" class="formacao-check">
+                <span>Doutorado</span>
+                <div class="icon-check"></div>
             </label>
+
         </div>
     </div>
 
     <div class="form-group">
-        <label><i class="fa-solid fa-laptop-medical" style="margin-right: 8px;"></i> Modalidade</label>
+        <label class="section-title"><i class="fa-solid fa-laptop-medical"></i> Modelo de Atendimento</label>
         <select id="modalidade">
             <option value="1">Online (Sem custo físico)</option>
             <option value="1.25">Presencial (Custos de infraestrutura)</option>
@@ -368,15 +432,11 @@
         </select>
     </div>
 
-    <button onclick="calcular()" class="calc-btn">Calcular Valor Sugerido</button>
+    <button onclick="calcular()" class="calc-btn">Calcular Honorário Sugerido</button>
 
     <div class="result-box">
-        <span class="result-label">Honorário Sugerido (Hora/Atendimento)</span>
+        <span class="result-label">Valor Ético Sugerido (Por Sessão)</span>
         <span class="result-value" id="resultado">R$ 0,00</span>
-    </div>
-
-    <div style="text-align: center; font-size: 12px; color: #555; margin-top: 25px; line-height: 1.5;">
-        * O valor reflete a média de mercado para o perfil selecionado, considerando<br>a remuneração base, nível de especialização e custos operacionais regionais.
     </div>
 </div>
 
@@ -385,19 +445,22 @@
         Design & Inteligência por <strong>WR-TECNOLOGIA | William Ribeiro</strong>
     </div>
 
-    <a href="https://wa.me/5541992531598?text=Olá,%20vi%20seu%20projeto%20da%20Calculadora%20Executiva%20e%20gostaria%20de%20um%20orçamento." target="_blank" class="btn-hire">
-        <i class="fa-brands fa-whatsapp" style="margin-right: 5px;"></i> Solicitar Projeto Exclusivo
+    <a href="https://wa.me/5541992531598?text=Olá,%20gostaria%20de%20contratar%20um%20projeto%20similar%20à%20Calculadora%20Executiva." target="_blank" class="btn-hire">
+        <i class="fa-brands fa-whatsapp"></i> Contratar Projeto Similar
     </a>
 
-    <div class="donation-card">
-        <h2>Incentive a Tecnologia</h2>
+    <div style="margin-top: 30px;"></div>
+
+    <div class="donation-container">
         <div id="qrcode"></div>
-        <p style="font-size: 12px; color: #777; margin: 10px 0;">Escaneie o QR Code para contribuição via Pix</p>
+        <p style="font-size: 11px; color: #666; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">Apoie o Projeto</p>
         
-        <div class="pix-key-container">
-            <span class="pix-key-text" id="pixKey">00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A</span>
-            <button class="copy-btn" onclick="copyPix()">COPIAR</button>
-        </div>
+        <!-- Chave escondida para cópia -->
+        <span id="pixKey">00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A</span>
+        
+        <button class="pix-btn" onclick="copyPix()">
+            <i class="fa-regular fa-copy" style="margin-right: 8px;"></i> Copiar Chave Pix
+        </button>
     </div>
 </div>
 
@@ -407,13 +470,34 @@
         const pixData = "00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A";
         new QRCode(document.getElementById("qrcode"), {
             text: pixData,
-            width: 140,
-            height: 140,
-            colorDark : "#111111",
+            width: 120,
+            height: 120,
+            colorDark : "#000000",
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         });
+        
+        // Calcular inicial para não ficar zerado
+        calcular();
     };
+
+    // Função para ativar visualmente os checkboxes
+    function toggleCheckbox(element) {
+        // Encontra o input dentro do label clicado
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        
+        // O clique no label já alterna o checkbox nativamente na maioria dos browsers,
+        // mas forçamos a atualização da classe visual aqui.
+        // Pequeno delay para garantir que o estado do checkbox atualizou
+        setTimeout(() => {
+            if (checkbox.checked) {
+                element.classList.add('active');
+            } else {
+                element.classList.remove('active');
+            }
+            calcular(); // Recalcula automaticamente ao clicar
+        }, 10);
+    }
 
     function calcular() {
         const baseProfissao = parseFloat(document.getElementById('profissao').value);
@@ -442,14 +526,18 @@
         textArea.select();
         try {
             document.execCommand('copy');
-            const btn = document.querySelector('.copy-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "COPIADO";
+            const btn = document.querySelector('.pix-btn');
+            const originalHTML = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
+            btn.style.borderColor = "#2e7d32";
             btn.style.color = "#2e7d32";
+            
             setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.color = "var(--primary)";
-            }, 2000);
+                btn.innerHTML = originalHTML;
+                btn.style.borderColor = "var(--gold-main)";
+                btn.style.color = "var(--gold-main)";
+            }, 2500);
         } catch (err) {
             console.error('Erro ao copiar', err);
         }
