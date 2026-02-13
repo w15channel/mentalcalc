@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Honorários | Saúde Mental</title>
+    <!-- Fontes Elegantes: Playfair Display (Títulos) e DM Sans (Corpo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --bg-body: #111111;       /* Preto Absoluto */
+            --bg-card: #1c1c1c;       /* Cinza Chumbo */
+            --primary: #d4af37;       /* Dourado Executivo */
+            --primary-hover: #b5952f;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border: #333333;
+            --success: #2e7d32;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            padding: 50px;
+            border-radius: 4px; /* Bordas mais retas para ar sério */
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary); /* Detalhe premium no topo */
+            position: relative;
+        }
+
+        /* Título com fonte Serifada Elegante */
+        h1 { 
+            font-family: 'Playfair Display', serif;
+            color: var(--primary); 
+            text-align: center; 
+            font-size: 32px; 
+            margin-bottom: 10px; 
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group { margin-bottom: 30px; }
+        
+        label { 
+            display: block; 
+            margin-bottom: 12px; 
+            font-size: 14px; 
+            color: var(--primary); 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            background: #252525;
+            color: white;
+            font-size: 16px;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s;
+            appearance: none; /* Remove estilo padrão do browser */
+        }
+
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+
+        select:focus, input:focus { border-color: var(--primary); outline: none; background: #2a2a2a; }
+
+        /* Checkboxes Elegantes */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: #252525;
+            padding: 15px 20px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .checkbox-item:hover { border-color: var(--primary); background: #2a2a2a; }
+        
+        .checkbox-item input {
+            width: 18px;
+            height: 18px;
+            margin-right: 15px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Botão Principal */
+        button.calc-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, #b5952f 100%);
+            color: #000;
+            border: none;
+            border-radius: 2px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        button.calc-btn:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); 
+        }
+
+        /* Área de Resultado */
+        .result-box {
+            margin-top: 40px;
+            padding: 30px;
+            background: #111;
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--primary);
+            text-align: center;
+            position: relative;
+        }
+
+        .result-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 10px;}
+        .result-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+        }
+
+        /* Rodapé e Créditos */
+        .footer-section {
+            margin-top: 60px;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
+
+        .credits {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .credits strong { color: var(--primary); font-weight: 400; }
+
+        .btn-hire {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: transparent;
+            color: var(--text-main);
+            padding: 12px 30px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            transition: 0.3s;
+        }
+
+        .btn-hire:hover { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.05); }
+
+        /* Área de Doação - Minimalista */
+        .donation-card {
+            background: #222;
+            padding: 30px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 4px;
+        }
+
+        .donation-card h2 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 20px; 
+            margin: 0 0 20px 0; 
+            color: var(--primary); 
+        }
+
+        #qrcode {
+            background: white;
+            padding: 15px;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .pix-key-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #111;
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .pix-key-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 13px;
+            flex-grow: 1;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--primary);
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 5px 10px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .copy-btn:hover { color: #fff; }
+
+        @media (max-width: 600px) {
+            .checkbox-group { grid-template-columns: 1fr; }
+            .container { padding: 30px 20px; }
+            h1 { font-size: 26px; }
+            .result-value { font-size: 42px; }
+            .pix-key-container { flex-direction: column; align-items: stretch; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Calculadora de Honorários</h1>
+    <p class="subtitle">Inteligência de Mercado para Profissionais da Saúde Mental</p>
+    
+    <div class="form-group">
+        <label><i class="fa-solid fa-user-doctor" style="margin-right: 8px;"></i> Área de Atuação</label>
+        <select id="profissao">
+            <!-- Ordenado Alfabeticamente -->
+            <option value="130">Acompanhante Terapêutico (AT)</option>
+            <option value="170">Analista Junguiano</option>
+            <option value="115">Arteterapeuta</option>
+            <option value="130">Coaching Comportamental</option>
+            <option value="120">Conselheiro(a) de Casais</option>
+            <option value="120">Conselheiro em Dependência Química</option>
+            <option value="140">Constelador Familiar</option>
+            <option value="110">Educador Social</option>
+            <option value="150">Gestalt-terapeuta</option>
+            <option value="160">Hipnoterapeuta</option>
+            <option value="115">Mediador de Conflitos</option>
+            <option value="125">Musicoterapeuta</option>
+            <option value="180">Neuropsicólogo(a)</option>
+            <option value="125">Orientador Vocacional</option>
+            <option value="150">Profissional de Sexualidade Integrativa</option>
+            <option value="140">Psicanalista</option>
+            <option value="150">Psicólogo(a) Clínico</option>
+            <option value="135">Psicopedagogo(a)</option>
+            <option value="130">Psicomotricista</option>
+            <option value="250">Psiquiatra</option>
+            <option value="130">Psicoterapeuta (Logoterapia)</option>
+            <option value="120">Sexólogo(a)</option>
+            <option value="140">Supervisor Clínico</option>
+            <option value="160">Terapeuta Cognitivo-Comportamental</option>
+            <option value="140">Terapeuta Comportamental</option>
+            <option value="135">Terapeuta Corporal</option>
+            <option value="140">Terapeuta de Família/Casal</option>
+            <option value="140">Terapeuta de Luto</option>
+            <option value="110">Terapeuta Holístico</option>
+            <option value="145">Terapeuta Ocupacional</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-map-location-dot" style="margin-right: 8px;"></i> Região de Atuação</label>
+        <select id="regiao">
+            <option value="1.0">Centro-Oeste (DF, GO, MT, MS)</option>
+            <option value="0.9">Nordeste (AL, BA, CE, MA, PB, PE, PI, RN, SE)</option>
+            <option value="0.85">Norte (AC, AP, AM, PA, RO, RR, TO)</option>
+            <option value="1.2">Sudeste (SP, RJ, MG, ES)</option>
+            <option value="1.1">Sul (PR, SC, RS)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-graduation-cap" style="margin-right: 8px;"></i> Composição Acadêmica</label>
+        <div class="checkbox-group">
+            <label class="checkbox-item">
+                <input type="checkbox" value="15" class="formacao-check"> Curso Profissionalizante (+R$15/h)
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" value="0" class="formacao-check" checked> Graduação (Base)
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" value="30" class="formacao-check"> Especialização (+R$30/h)
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" value="40" class="formacao-check"> Pós Graduação (+R$40/h)
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" value="60" class="formacao-check"> Mestrado (+R$60/h)
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" value="100" class="formacao-check"> Doutorado (+R$100/h)
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label><i class="fa-solid fa-laptop-medical" style="margin-right: 8px;"></i> Modalidade</label>
+        <select id="modalidade">
+            <option value="1">Online (Sem custo físico)</option>
+            <option value="1.25">Presencial (Custos de infraestrutura)</option>
+            <option value="1.15">Híbrido (Média Ponderada)</option>
+        </select>
+    </div>
+
+    <button onclick="calcular()" class="calc-btn">Calcular Valor Sugerido</button>
+
+    <div class="result-box">
+        <span class="result-label">Honorário Sugerido (Hora/Atendimento)</span>
+        <span class="result-value" id="resultado">R$ 0,00</span>
+    </div>
+
+    <div style="text-align: center; font-size: 12px; color: #555; margin-top: 25px; line-height: 1.5;">
+        * O valor reflete a média de mercado para o perfil selecionado, considerando<br>a remuneração base, nível de especialização e custos operacionais regionais.
+    </div>
+</div>
+
+<div class="footer-section">
+    <div class="credits">
+        Design & Inteligência por <strong>WR-TECNOLOGIA | William Ribeiro</strong>
+    </div>
+
+    <a href="https://wa.me/5541992531598?text=Olá,%20vi%20seu%20projeto%20da%20Calculadora%20Executiva%20e%20gostaria%20de%20um%20orçamento." target="_blank" class="btn-hire">
+        <i class="fa-brands fa-whatsapp" style="margin-right: 5px;"></i> Solicitar Projeto Exclusivo
+    </a>
+
+    <div class="donation-card">
+        <h2>Incentive a Tecnologia</h2>
+        <div id="qrcode"></div>
+        <p style="font-size: 12px; color: #777; margin: 10px 0;">Escaneie o QR Code para contribuição via Pix</p>
+        
+        <div class="pix-key-container">
+            <span class="pix-key-text" id="pixKey">00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A</span>
+            <button class="copy-btn" onclick="copyPix()">COPIAR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Inicializar QR Code
+    window.onload = function() {
+        const pixData = "00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A";
+        new QRCode(document.getElementById("qrcode"), {
+            text: pixData,
+            width: 140,
+            height: 140,
+            colorDark : "#111111",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    };
+
+    function calcular() {
+        const baseProfissao = parseFloat(document.getElementById('profissao').value);
+        const multiplicadorRegiao = parseFloat(document.getElementById('regiao').value);
+        const multiplicadorModalidade = parseFloat(document.getElementById('modalidade').value);
+
+        // Calcular Formação Acumulada
+        let somaFormacao = 0;
+        const checks = document.querySelectorAll('.formacao-check:checked');
+        checks.forEach((checkbox) => {
+            somaFormacao += parseFloat(checkbox.value);
+        });
+
+        // Lógica de cálculo
+        let total = (baseProfissao * multiplicadorRegiao) + somaFormacao;
+        total = total * multiplicadorModalidade;
+
+        document.getElementById('resultado').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function copyPix() {
+        const pixKey = document.getElementById('pixKey').innerText;
+        const textArea = document.createElement("textarea");
+        textArea.value = pixKey;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "COPIADO";
+            btn.style.color = "#2e7d32";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.color = "var(--primary)";
+            }, 2000);
+        } catch (err) {
+            console.error('Erro ao copiar', err);
+        }
+        document.body.removeChild(textArea);
+    }
+</script>
+
+</body>
+</html>
