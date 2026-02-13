@@ -3,547 +3,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Honorários | Saúde Mental</title>
-    <!-- Fontes Premium -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Honorários | Saúde Mental</title>
+    <!-- Fontes Modernas -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
-            --bg-body: #050505;       /* Preto Profundo */
-            --bg-card: #121212;       /* Preto Fosco */
-            --gold-main: #cca43b;     /* Dourado Nobre */
-            --gold-light: #e5c567;    /* Dourado Luz */
-            --gold-dark: #8a6e2f;     /* Dourado Sombra */
-            --text-main: #f0f0f0;
-            --text-muted: #888888;
-            --border-color: #333333;
+            --bg-primary: #0b0f1a;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
         }
 
-        * { box-sizing: border-box; outline: none; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Manrope', sans-serif;
-            background-color: var(--bg-body);
-            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #050505 70%);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            margin: 0;
             min-height: 100vh;
+            padding: 60px 20px;
         }
 
-        .container {
-            background-color: var(--bg-card);
-            padding: 60px 50px;
-            border-radius: 12px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-            max-width: 850px;
+        .main-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 800px;
             width: 100%;
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Detalhe Dourado no Topo */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold-main), transparent);
-        }
-
-        /* Tipografia */
-        h1 { 
-            font-family: 'Cinzel', serif;
-            color: var(--gold-main); 
-            text-align: center; 
-            font-size: 36px; 
-            margin: 0 0 10px 0; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, var(--gold-light), var(--gold-main));
+        header { text-align: center; margin-bottom: 40px; }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
         }
 
-        .subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin-bottom: 50px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .form-group { margin-bottom: 35px; }
-        
-        label.section-title { 
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px; 
-            font-size: 14px; 
-            color: var(--gold-main); 
-            font-weight: 600;
+        .badge {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
-        label.section-title i { margin-right: 10px; font-size: 16px; }
+        .form-section { margin-bottom: 30px; }
+        .section-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
-        /* Inputs e Selects Estilizados */
-        select, input {
+        select, input[type="text"] {
             width: 100%;
-            padding: 18px;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            background: #1a1a1a;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
             color: white;
-            font-size: 16px;
-            font-family: 'Manrope', sans-serif;
-            transition: all 0.3s ease;
+            font-size: 1rem;
+            transition: all 0.2s;
             cursor: pointer;
-            appearance: none;
         }
 
-        select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cca43b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 20px center;
-            background-size: 16px;
-        }
+        select:focus { border-color: var(--accent-purple); outline: none; }
 
-        select:hover, input:hover { border-color: #444; background: #222; }
-        select:focus, input:focus { border-color: var(--gold-main); box-shadow: 0 0 15px rgba(204, 164, 59, 0.1); outline: none; }
-
-        /* REINVENÇÃO: Checkboxes como Cartões Selecionáveis */
-        .checkbox-group {
+        /* Grid de Checkboxes Estilizados */
+        .checkbox-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 12px;
         }
 
-        /* Ocultar o input original */
-        .checkbox-card input[type="checkbox"] {
-            display: none;
+        .check-card {
+            position: relative;
+            cursor: pointer;
         }
 
-        .checkbox-card {
+        .check-card input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .check-content {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            gap: 12px;
+            transition: all 0.2s;
         }
 
-        .checkbox-card span { font-size: 14px; color: #ccc; }
-        .checkbox-card .icon-check { 
-            width: 20px; 
-            height: 20px; 
-            border: 2px solid #555; 
+        .check-card:hover .check-content { background: rgba(255, 255, 255, 0.05); }
+
+        .check-card input:checked + .check-content {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+        }
+
+        .indicator {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--glass-border);
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
-        }
-        .checkbox-card .icon-check::after {
-            content: '\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 12px;
-            color: #000;
-            opacity: 0;
-            transform: scale(0);
             transition: all 0.2s;
         }
 
-        /* Estado Selecionado */
-        .checkbox-card.active {
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
-            border-color: var(--gold-main);
-            box-shadow: 0 0 20px rgba(204, 164, 59, 0.15);
+        .check-card input:checked + .check-content .indicator {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
         }
 
-        .checkbox-card.active span { color: var(--gold-main); font-weight: 600; }
-        
-        .checkbox-card.active .icon-check { 
-            background: var(--gold-main); 
-            border-color: var(--gold-main); 
-        }
-        
-        .checkbox-card.active .icon-check::after {
-            opacity: 1;
-            transform: scale(1);
-        }
+        .indicator i { font-size: 10px; color: white; display: none; }
+        .check-card input:checked + .check-content .indicator i { display: block; }
 
-        /* Botão Principal */
-        button.calc-btn {
+        .btn-calculate {
             width: 100%;
-            padding: 22px;
-            background: linear-gradient(135deg, var(--gold-main) 0%, var(--gold-dark) 100%);
-            color: #111;
+            background: var(--text-main);
+            color: var(--bg-primary);
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 20px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
+            transition: all 0.2s;
+            margin-top: 10px;
         }
 
-        button.calc-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-main) 100%);
-            z-index: -1;
-            transition: opacity 0.4s;
-            opacity: 0;
-        }
+        .btn-calculate:hover { transform: translateY(-2px); filter: brightness(0.9); }
 
-        button.calc-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(204, 164, 59, 0.2); }
-        button.calc-btn:hover::before { opacity: 1; }
-
-        /* Área de Resultado */
-        .result-box {
-            margin-top: 50px;
-            padding: 40px;
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            border-top: 3px solid var(--gold-main);
+        /* Resultado Glassmorphism */
+        .result-panel {
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border-radius: 20px;
             text-align: center;
-            position: relative;
-            border-radius: 0 0 12px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .result-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px; display: block; }
-        .result-value {
-            font-family: 'Cinzel', serif;
-            font-size: 64px;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--gold-light), var(--gold-main), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: block;
-            line-height: 1;
+        .result-panel h2 { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+        .price-display { font-size: 4rem; font-weight: 800; color: white; line-height: 1; }
+
+        /* Rodapé e Créditos */
+        footer { margin-top: 60px; text-align: center; width: 100%; max-width: 800px; }
+        
+        .author-box {
+            font-size: 0.875rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
         }
+        .author-box strong { color: white; }
 
-        /* Footer */
-        .footer-section {
-            margin-top: 60px;
-            width: 100%;
-            text-align: center;
-            padding-top: 40px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .credits { font-size: 13px; color: #555; margin-bottom: 30px; }
-        .credits strong { color: var(--gold-main); font-weight: 400; }
-
-        .btn-hire {
+        .whatsapp-link {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            background: rgba(255,255,255,0.03);
-            color: #aaa;
-            padding: 14px 35px;
-            border: 1px solid var(--border-color);
-            border-radius: 50px;
+            gap: 10px;
+            background: #25d366;
+            color: white;
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: 0.3s;
         }
 
-        .btn-hire:hover { 
-            border-color: #25d366; 
-            color: #25d366; 
-            background: rgba(37, 211, 102, 0.05); 
-        }
+        .whatsapp-link:hover { transform: scale(1.05); }
 
-        /* Doação */
-        .donation-container {
+        .donation-section {
             margin-top: 40px;
-            background: #0f0f0f;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
             padding: 30px;
-            border-radius: 8px;
-            border: 1px solid #222;
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
+            border-radius: 24px;
         }
 
         #qrcode {
-            padding: 10px;
-            background: #fff;
-            border-radius: 4px;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
-        .pix-btn {
-            margin-top: 20px;
+        .pix-copy-btn {
             background: transparent;
-            color: var(--gold-main);
-            border: 1px solid var(--gold-main);
-            padding: 10px 25px;
-            border-radius: 4px;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 2px;
-            transition: 0.3s;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto;
         }
 
-        .pix-btn:hover { background: var(--gold-main); color: #000; }
-        
-        /* Ocultar a chave pix textual longa, mostrar só botão */
-        #pixKey { display: none; }
+        .pix-copy-btn:hover { border-color: var(--accent-purple); }
 
-        @media (max-width: 768px) {
-            .container { padding: 30px 20px; }
-            h1 { font-size: 28px; }
-            .checkbox-group { grid-template-columns: 1fr; }
-            .result-value { font-size: 48px; }
+        @media (max-width: 600px) {
+            .main-card { padding: 25px; }
+            h1 { font-size: 1.75rem; }
+            .price-display { font-size: 2.5rem; }
+            .checkbox-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Calculadora de Honorários</h1>
-    <span class="subtitle">Inteligência de Mercado em Saúde Mental</span>
-    
-    <div class="form-group">
-        <label class="section-title"><i class="fa-solid fa-user-doctor"></i> Especialidade</label>
-        <select id="profissao">
-            <option value="130">Acompanhante Terapêutico (AT)</option>
-            <option value="170">Analista Junguiano</option>
-            <option value="115">Arteterapeuta</option>
-            <option value="130">Coaching Comportamental</option>
-            <option value="120">Conselheiro(a) de Casais</option>
-            <option value="120">Conselheiro em Dependência Química</option>
-            <option value="140">Constelador Familiar</option>
-            <option value="110">Educador Social</option>
-            <option value="150">Gestalt-terapeuta</option>
-            <option value="160">Hipnoterapeuta</option>
-            <option value="115">Mediador de Conflitos</option>
-            <option value="125">Musicoterapeuta</option>
-            <option value="180">Neuropsicólogo(a)</option>
-            <option value="125">Orientador Vocacional</option>
-            <option value="150">Profissional de Sexualidade Integrativa</option>
-            <option value="140">Psicanalista</option>
-            <option value="150">Psicólogo(a) Clínico</option>
-            <option value="135">Psicopedagogo(a)</option>
-            <option value="130">Psicomotricista</option>
-            <option value="250">Psiquiatra</option>
-            <option value="130">Psicoterapeuta (Logoterapia)</option>
-            <option value="120">Sexólogo(a)</option>
-            <option value="140">Supervisor Clínico</option>
-            <option value="160">Terapeuta Cognitivo-Comportamental</option>
-            <option value="140">Terapeuta Comportamental</option>
-            <option value="135">Terapeuta Corporal</option>
-            <option value="140">Terapeuta de Família/Casal</option>
-            <option value="140">Terapeuta de Luto</option>
-            <option value="110">Terapeuta Holístico</option>
-            <option value="145">Terapeuta Ocupacional</option>
-        </select>
-    </div>
+    <div class="main-card">
+        <header>
+            <div class="badge">Inteligência WR-Tec</div>
+            <h1>Calculadora de Honorários</h1>
+            <p style="color: var(--text-dim)">Referencial estratégico para profissionais comportamentais</p>
+        </header>
 
-    <div class="form-group">
-        <label class="section-title"><i class="fa-solid fa-map-location-dot"></i> Região</label>
-        <select id="regiao">
-            <option value="1.0">Centro-Oeste (DF, GO, MT, MS)</option>
-            <option value="0.9">Nordeste (AL, BA, CE, MA, PB, PE, PI, RN, SE)</option>
-            <option value="0.85">Norte (AC, AP, AM, PA, RO, RR, TO)</option>
-            <option value="1.2">Sudeste (SP, RJ, MG, ES)</option>
-            <option value="1.1">Sul (PR, SC, RS)</option>
-        </select>
-    </div>
+        <div class="form-section">
+            <label class="section-label">Sua Área de Atuação</label>
+            <select id="profissao" onchange="calcular()">
+                <option value="130">Acompanhante Terapêutico (AT)</option>
+                <option value="170">Analista Junguiano</option>
+                <option value="115">Arteterapeuta</option>
+                <option value="130">Coaching Comportamental</option>
+                <option value="120">Conselheiro(a) de Casais</option>
+                <option value="120">Conselheiro em Dependência Química</option>
+                <option value="140">Constelador Familiar</option>
+                <option value="110">Educador Social</option>
+                <option value="150">Gestalt-terapeuta</option>
+                <option value="160">Hipnoterapeuta</option>
+                <option value="115">Mediador de Conflitos</option>
+                <option value="125">Musicoterapeuta</option>
+                <option value="180">Neuropsicólogo(a)</option>
+                <option value="125">Orientador Vocacional</option>
+                <option value="150">Profissional de Sexualidade Integrativa</option>
+                <option value="140">Psicanalista</option>
+                <option value="150">Psicólogo(a) Clínico</option>
+                <option value="135">Psicopedagogo(a)</option>
+                <option value="130">Psicomotricista</option>
+                <option value="250">Psiquiatra</option>
+                <option value="130">Psicoterapeuta (Logoterapia)</option>
+                <option value="120">Sexólogo(a)</option>
+                <option value="140">Supervisor Clínico</option>
+                <option value="160">Terapeuta Cognitivo-Comportamental</option>
+                <option value="140">Terapeuta Comportamental</option>
+                <option value="135">Terapeuta Corporal</option>
+                <option value="140">Terapeuta de Família/Casal</option>
+                <option value="140">Terapeuta de Luto</option>
+                <option value="110">Terapeuta Holístico</option>
+                <option value="145">Terapeuta Ocupacional</option>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label class="section-title"><i class="fa-solid fa-graduation-cap"></i> Formação Acadêmica (Multi-seleção)</label>
-        <div class="checkbox-group">
-            
-            <label class="checkbox-card" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="15" class="formacao-check">
-                <span>Curso Profissionalizante</span>
-                <div class="icon-check"></div>
-            </label>
+        <div class="form-section">
+            <label class="section-label">Sua Localidade</label>
+            <select id="regiao" onchange="calcular()">
+                <option value="1.0">Centro-Oeste (DF, GO, MT, MS)</option>
+                <option value="0.9">Nordeste (AL, BA, CE, MA, PB, PE, PI, RN, SE)</option>
+                <option value="0.85">Norte (AC, AP, AM, PA, RO, RR, TO)</option>
+                <option value="1.2">Sudeste (SP, RJ, MG, ES)</option>
+                <option value="1.1">Sul (PR, SC, RS)</option>
+            </select>
+        </div>
 
-            <label class="checkbox-card active" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="0" class="formacao-check" checked>
-                <span>Graduação (Base)</span>
-                <div class="icon-check"></div>
-            </label>
+        <div class="form-section">
+            <label class="section-label">Preparo Acadêmico (Acumulativo)</label>
+            <div class="checkbox-grid">
+                
+                <label class="check-card">
+                    <input type="checkbox" value="15" class="formacao-check" onchange="calcular()">
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Profissionalizante</span>
+                    </div>
+                </label>
 
-            <label class="checkbox-card" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="30" class="formacao-check">
-                <span>Especialização</span>
-                <div class="icon-check"></div>
-            </label>
+                <label class="check-card">
+                    <input type="checkbox" value="0" class="formacao-check" onchange="calcular()" checked>
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Graduação</span>
+                    </div>
+                </label>
 
-            <label class="checkbox-card" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="40" class="formacao-check">
-                <span>Pós Graduação</span>
-                <div class="icon-check"></div>
-            </label>
+                <label class="check-card">
+                    <input type="checkbox" value="30" class="formacao-check" onchange="calcular()">
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Especialização</span>
+                    </div>
+                </label>
 
-            <label class="checkbox-card" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="60" class="formacao-check">
-                <span>Mestrado</span>
-                <div class="icon-check"></div>
-            </label>
+                <label class="check-card">
+                    <input type="checkbox" value="40" class="formacao-check" onchange="calcular()">
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Pós Graduação</span>
+                    </div>
+                </label>
 
-            <label class="checkbox-card" onclick="toggleCheckbox(this)">
-                <input type="checkbox" value="100" class="formacao-check">
-                <span>Doutorado</span>
-                <div class="icon-check"></div>
-            </label>
+                <label class="check-card">
+                    <input type="checkbox" value="60" class="formacao-check" onchange="calcular()">
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Mestrado</span>
+                    </div>
+                </label>
 
+                <label class="check-card">
+                    <input type="checkbox" value="100" class="formacao-check" onchange="calcular()">
+                    <div class="check-content">
+                        <div class="indicator"><i class="fa-solid fa-check"></i></div>
+                        <span>Doutorado</span>
+                    </div>
+                </label>
+
+            </div>
+        </div>
+
+        <div class="form-section">
+            <label class="section-label">Modelo de Sessão</label>
+            <select id="modalidade" onchange="calcular()">
+                <option value="1">Online (Sem custo fixo)</option>
+                <option value="1.25">Presencial (Custos de Infra)</option>
+                <option value="1.15">Híbrido</option>
+            </select>
+        </div>
+
+        <div class="result-panel">
+            <h2>Honorário Sugerido (Sessão)</h2>
+            <div class="price-display" id="resultado">R$ 0,00</div>
+            <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 15px;">* Valor sugerido baseado em média regional e especializações</p>
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="section-title"><i class="fa-solid fa-laptop-medical"></i> Modelo de Atendimento</label>
-        <select id="modalidade">
-            <option value="1">Online (Sem custo físico)</option>
-            <option value="1.25">Presencial (Custos de infraestrutura)</option>
-            <option value="1.15">Híbrido (Média Ponderada)</option>
-        </select>
-    </div>
+    <footer>
+        <div class="author-box">
+            Desenvolvido por <strong>WR-TECNOLOGIA | William Ribeiro</strong>
+        </div>
 
-    <button onclick="calcular()" class="calc-btn">Calcular Honorário Sugerido</button>
+        <a href="https://wa.me/5541992531598?text=Olá%20William,%20gostaria%20de%20um%20projeto%20similar%20à%20Calculadora%20Moderna." class="whatsapp-link" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i> Contratar Projeto Similar
+        </a>
 
-    <div class="result-box">
-        <span class="result-label">Valor Ético Sugerido (Por Sessão)</span>
-        <span class="result-value" id="resultado">R$ 0,00</span>
-    </div>
-</div>
+        <div class="donation-section">
+            <h3 style="margin-bottom: 15px; font-size: 1rem;">Apoie a iniciativa</h3>
+            <div id="qrcode"></div>
+            <span id="pixKey" style="display:none">00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A</span>
+            <button class="pix-copy-btn" onclick="copyPix()">
+                <i class="fa-regular fa-copy"></i> Copiar Chave Pix
+            </button>
+        </div>
+    </footer>
 
-<div class="footer-section">
-    <div class="credits">
-        Design & Inteligência por <strong>WR-TECNOLOGIA | William Ribeiro</strong>
-    </div>
-
-    <a href="https://wa.me/5541992531598?text=Olá,%20gostaria%20de%20contratar%20um%20projeto%20similar%20à%20Calculadora%20Executiva." target="_blank" class="btn-hire">
-        <i class="fa-brands fa-whatsapp"></i> Contratar Projeto Similar
-    </a>
-
-    <div style="margin-top: 30px;"></div>
-
-    <div class="donation-container">
-        <div id="qrcode"></div>
-        <p style="font-size: 11px; color: #666; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">Apoie o Projeto</p>
-        
-        <!-- Chave escondida para cópia -->
-        <span id="pixKey">00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A</span>
-        
-        <button class="pix-btn" onclick="copyPix()">
-            <i class="fa-regular fa-copy" style="margin-right: 8px;"></i> Copiar Chave Pix
-        </button>
-    </div>
-</div>
-
-<script>
-    // Inicializar QR Code
-    window.onload = function() {
-        const pixData = "00020126360014BR.GOV.BCB.PIX0114+55419925315985204000053039865802BR5925William Ribeiro dos Santo6009SAO PAULO62140510C7I0x49TlI6304D49A";
-        new QRCode(document.getElementById("qrcode"), {
-            text: pixData,
-            width: 120,
-            height: 120,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-        
-        // Calcular inicial para não ficar zerado
-        calcular();
-    };
-
-    // Função para ativar visualmente os checkboxes
-    function toggleCheckbox(element) {
-        // Encontra o input dentro do label clicado
-        const checkbox = element.querySelector('input[type="checkbox"]');
-        
-        // O clique no label já alterna o checkbox nativamente na maioria dos browsers,
-        // mas forçamos a atualização da classe visual aqui.
-        // Pequeno delay para garantir que o estado do checkbox atualizou
-        setTimeout(() => {
-            if (checkbox.checked) {
-                element.classList.add('active');
-            } else {
-                element.classList.remove('active');
-            }
-            calcular(); // Recalcula automaticamente ao clicar
-        }, 10);
-    }
-
-    function calcular() {
-        const baseProfissao = parseFloat(document.getElementById('profissao').value);
-        const multiplicadorRegiao = parseFloat(document.getElementById('regiao').value);
-        const multiplicadorModalidade = parseFloat(document.getElementById('modalidade').value);
-
-        // Calcular Formação Acumulada
-        let somaFormacao = 0;
-        const checks = document.querySelectorAll('.formacao-check:checked');
-        checks.forEach((checkbox) => {
-            somaFormacao += parseFloat(checkbox.value);
-        });
-
-        // Lógica de cálculo
-        let total = (baseProfissao * multiplicadorRegiao) + somaFormacao;
-        total = total * multiplicadorModalidade;
-
-        document.getElementById('resultado').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-
-    function copyPix() {
-        const pixKey = document.getElementById('pixKey').innerText;
-        const textArea = document.createElement("textarea");
-        textArea.value = pixKey;
-        document.body.appendChild(textArea);
-        textArea.select();
-        try {
-            document.execCommand('copy');
-            const btn = document.querySelector('.pix-btn');
-            const originalHTML = btn.innerHTML;
+    <script>
+        window.onload = function() {
+            // Gerar QR Code Pix
+            const pixData = document.getElementById("pixKey").innerText;
+            new QRCode(document.getElementById("qrcode"), {
+                text: pixData,
+                width: 140,
+                height: 140,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
             
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
-            btn.style.borderColor = "#2e7d32";
-            btn.style.color = "#2e7d32";
-            
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.style.borderColor = "var(--gold-main)";
-                btn.style.color = "var(--gold-main)";
-            }, 2500);
-        } catch (err) {
-            console.error('Erro ao copiar', err);
+            calcular();
+        };
+
+        function calcular() {
+            const baseProfissao = parseFloat(document.getElementById('profissao').value);
+            const multiplicadorRegiao = parseFloat(document.getElementById('regiao').value);
+            const multiplicadorModalidade = parseFloat(document.getElementById('modalidade').value);
+
+            let somaFormacao = 0;
+            const checks = document.querySelectorAll('.formacao-check:checked');
+            checks.forEach((checkbox) => {
+                somaFormacao += parseFloat(checkbox.value);
+            });
+
+            let total = (baseProfissao * multiplicadorRegiao) + somaFormacao;
+            total = total * multiplicadorModalidade;
+
+            // Formatação Real
+            document.getElementById('resultado').innerText = total.toLocaleString('pt-BR', { 
+                style: 'currency', 
+                currency: 'BRL' 
+            });
         }
-        document.body.removeChild(textArea);
-    }
-</script>
 
+        function copyPix() {
+            const pixKey = document.getElementById('pixKey').innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = pixKey;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const btn = document.querySelector('.pix-copy-btn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copiado!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copiar Chave Pix';
+                }, 2000);
+            } catch (err) {
+                console.error('Erro ao copiar', err);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
 </body>
 </html>
